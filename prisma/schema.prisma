@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id                 Int                  @id @default(autoincrement())
+  courseName         String
+  credits            Int
+  departmentId       Int
+  created_at         DateTime             @default(now())
+  Department         Department           @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  Enrollment         Enrollment[]
+  TeachingAssignment TeachingAssignment[]
+}
+
+model Department {
+  id         Int         @id @default(autoincrement())
+  name       String
+  created_at DateTime    @default(now())
+  Course     Course[]
+  Professor  Professor[]
+  Student    Student[]
+}
+
+model Enrollment {
+  id         Int      @id @default(autoincrement())
+  studentId  Int
+  courseId   Int
+  created_at DateTime @default(now())
+  Course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  Student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Professor {
+  id                 Int                  @id @default(autoincrement())
+  firstName          String
+  lastName           String
+  departmentId       Int
+  created_at         DateTime             @default(now())
+  Department         Department           @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  TeachingAssignment TeachingAssignment[]
+}
+
+model Student {
+  id           Int          @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  dob          DateTime
+  email        String
+  departmentId Int
+  created_at   DateTime     @default(now())
+  Enrollment   Enrollment[]
+  Department   Department   @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+}
+
+model TeachingAssignment {
+  id          Int       @id @default(autoincrement())
+  professorId Int
+  courseId    Int
+  created_at  DateTime  @default(now())
+  Course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  Professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
+}

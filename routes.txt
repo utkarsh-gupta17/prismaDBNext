@@ -1,0 +1,4 @@
+to create a students - {http://localhost:3000}/api/student
+to get a single student - {http://localhost:3000}/api/student/[id]
+to get all students - {http://localhost:3000}/api/student
+to delete a student - {http://localhost:3000}/api/student/[id]
